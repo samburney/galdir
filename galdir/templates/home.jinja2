@@ -7,10 +7,16 @@
     {{item.type}} <a href="/view/{{item.path}}">{{item.name}}</a>
         {% endif %}
         {% if item.type == 'file' %}
-    <a href="/albums/{{item.path}}">
-        <img src="/albums/{{item.path}}" />
-    </a>
         {% endif %}
 </p>
     {% endfor %}
+<p>
+    {% for item in items %}
+        {% if item.type == 'file' %}
+    <a href="/albums/{{item.path}}">
+        <img src="/viewimage/{{item.path}}" />
+    </a>
+        {% endif %}
+    {% endfor %}
+</p>
 {% endblock content %}

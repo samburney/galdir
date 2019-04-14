@@ -3,6 +3,10 @@ import re
 from pyramid.response import Response
 from pyramid.view import view_config
 
+from wand.image import Image
+
+import logging
+log = logging.getLogger(__name__)
 
 @view_config(
     route_name='home',
@@ -68,3 +72,31 @@ def view(request):
                 })
 
     return {'items': items}
+
+
+@view_config(
+    route_name = 'viewimage'
+)
+def viewimage(request):
+    settings = request.registry.settings
+
+    dir_script = os.path.dirname(__file__)
+    dir_app = os.path.abspath(os.path.join(dir_script, '..'))
+    dir_albums = os.path.normpath(os.path.join(
+        dir_app, settings['galdir.dir_albums']))
+    dir_view = os.path.normpath(os.path.join(
+        dir_app, dir_albums, request.matchdict['path']))
+
+    if os.path.isfile(dir_view):
+        with Image(filename=dir_view) as image:
+            with image.clone() as thumb:
+                thumb.transform(resize='200x200>')
+                thumb_bin = thumb.make_blob('jpeg')
+
+                response = Response(
+                    body = thumb_bin,
+                    content_type = 'image/jpeg'
+                )
+
+                return response
+

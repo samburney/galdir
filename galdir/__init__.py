@@ -7,6 +7,7 @@ def main(global_config, **settings):
 
     config.add_route('home', '/')
     config.add_route('view', '/view/{path:.*}')
+    config.add_route('viewimage', '/viewimage/{path:.*}')
 
     dir_script = os.path.dirname(__file__)
     dir_app = os.path.abspath(os.path.join(dir_script, '..'))

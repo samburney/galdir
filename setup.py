@@ -5,7 +5,8 @@ from setuptools import setup
 requires = [
     'pyramid',
     'waitress',
-    'pyramid_jinja2'
+    'pyramid_jinja2',
+    'Wand',
 ]
 
 setup(
