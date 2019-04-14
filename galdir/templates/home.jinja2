@@ -1,5 +1,16 @@
 {% extends "layouts/default.jinja2" %} 
 
 {% block content %}
-<b>Hello world</b>
+    {% for item in items %}
+<p>
+        {% if item.type == 'dir' %}
+    {{item.type}} <a href="/view/{{item.path}}">{{item.name}}</a>
+        {% endif %}
+        {% if item.type == 'file' %}
+    <a href="/albums/{{item.path}}">
+        <img src="/albums/{{item.path}}" />
+    </a>
+        {% endif %}
+</p>
+    {% endfor %}
 {% endblock content %}
