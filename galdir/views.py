@@ -1,9 +1,11 @@
 import os
+import io
 import re
+
 from pyramid.response import Response
 from pyramid.view import view_config
 
-from wand.image import Image
+from PIL import Image
 
 import logging
 log = logging.getLogger(__name__)
@@ -18,6 +20,8 @@ def home(request):
     dir_script = os.path.dirname(__file__)
     dir_app = os.path.abspath(os.path.join(dir_script, '..'))
     dir_albums = os.path.normpath(os.path.join(dir_app, settings['galdir.dir_albums']))
+
+    log.debug('Listing from ' + dir_albums)
 
     if(os.path.isdir(dir_albums)):
         contents = os.listdir(dir_albums)
@@ -53,6 +57,8 @@ def view(request):
     dir_view = os.path.normpath(os.path.join(
         dir_app, dir_albums, request.matchdict['path']))
 
+    log.debug('Listing from ' + dir_view)
+
     if os.path.isdir(dir_view):
         contents = os.listdir(dir_view)
 
@@ -84,19 +90,32 @@ def viewimage(request):
     dir_app = os.path.abspath(os.path.join(dir_script, '..'))
     dir_albums = os.path.normpath(os.path.join(
         dir_app, settings['galdir.dir_albums']))
-    dir_view = os.path.normpath(os.path.join(
+    dir_image = os.path.normpath(os.path.join(
         dir_app, dir_albums, request.matchdict['path']))
 
-    if os.path.isfile(dir_view):
-        with Image(filename=dir_view) as image:
-            with image.clone() as thumb:
-                thumb.transform(resize='200x200>')
-                thumb_bin = thumb.make_blob('jpeg')
+    log.debug('Viewing from ' + dir_image)
+
+    if os.path.isfile(dir_image):
+        # PIL
+        try:
+            image = Image.open(dir_image)
+            image.thumbnail((200, 200))
+
+            with io.BytesIO() as thumb_bin:
+                # Handle RGBA images
+                if image.mode == 'RGBA':
+                    image_mime = 'image/png'
+                    image.save(thumb_bin, 'PNG')
+                else:
+                    image_mime = 'image/jpeg'
+                    image.save(thumb_bin, 'JPEG')
 
                 response = Response(
-                    body = thumb_bin,
-                    content_type = 'image/jpeg'
+                    body = thumb_bin.getvalue(),
+                    content_type = image_mime
                 )
 
                 return response
 
+        except IOError:
+            log.debug('Something broke.')
