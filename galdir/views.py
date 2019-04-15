@@ -24,37 +24,34 @@ def home(request):
     renderer='templates/home.jinja2'
 )
 def view(request):
-    settings = request.registry.settings
-    dir_albums = functions.get_albums_path(settings)
-    if('path' in request.matchdict):
-        path_request = request.matchdict['path'] + '/'
-        dir_view = os.path.normpath(os.path.join(dir_albums, path_request))
-    else:
-        path_request = ''
-        dir_view = dir_albums
+    path_info = functions.get_path_info(request)
 
-    if os.path.isdir(dir_view):
-        contents = os.listdir(dir_view)
+    if os.path.isdir(path_info['dir_view']):
+        contents = os.listdir(path_info['dir_view'])
 
         # Process resulting directory list
         items = []
         for content in contents:
-            path_content = path_request + content
+            # Add path delimiter if not the root directory
+            if path_info['path_request'] != '':
+                path_content = path_info['path_request'] + '/' + content
+            else:
+                path_content = content
 
             if re.search(r'^\.', content) == None:
-                if os.path.isdir(os.path.join(dir_view, content)):
-                    type = 'dir'
+                if os.path.isdir(os.path.join(path_info['dir_view'], content)):
+                    path_type = 'dir'
                     items.append({
                         'name': content,
                         'path': path_content,
-                        'type': type,
+                        'type': path_type,
                     })
                 else:
-                    type = 'file'
+                    path_type = 'file'
                     items.append({
                         'name': content,
                         'path': path_content,
-                        'type': type,
+                        'type': path_type,
                         'namesplit': functions.namesplit(path_content),
                     })
 
@@ -65,14 +62,11 @@ def view(request):
     route_name = 'viewimage'
 )
 def viewimage(request):
-    settings = request.registry.settings
+    path_info = functions.get_path_info(request)
+    image_namesplit = functions.namesplit(path_info['path_request'])
 
-    path_request = request.matchdict['path']
-    image_namesplit = functions.namesplit(path_request) 
-
-    dir_albums = functions.get_albums_path(settings)
     dir_image = os.path.normpath(
-        os.path.join(dir_albums, image_namesplit['file_dir'], image_namesplit['file_name'] + '.' + image_namesplit['file_ext']))
+        os.path.join(path_info['dir_albums'], image_namesplit['file_dir'], image_namesplit['file_name'] + '.' + image_namesplit['file_ext']))
 
     if os.path.isfile(dir_image):
         try:
@@ -104,3 +98,11 @@ def viewimage(request):
 
     else:
         return Response('File ' + dir_image + ' not found.')
+
+
+@view_config(
+    route_name='dirthumb'
+)
+def dirthumb(request):
+
+    return Response('test')

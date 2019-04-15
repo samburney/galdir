@@ -1,13 +1,15 @@
 {% extends "layouts/default.jinja2" %} 
 
 {% block content %}
+<p>
     {% for item in items %}
         {% if item.type == 'dir' %}
-<p>
-    {{item.type}} <a href="/view/{{item.path}}">{{item.name}}</a>
-</p>
+    <a href="/view/{{item.path}}">
+        <img src="/dirthumb/{{item.path}}-200.jpg" />
+    </a>
         {% endif %}
     {% endfor %}
+</p>
 <p>
     {% for item in items %}
         {% if item.type == 'file' %}

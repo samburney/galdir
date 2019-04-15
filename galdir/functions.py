@@ -50,6 +50,26 @@ def namesplit(path):
 def get_albums_path(settings):
     dir_script = os.path.dirname(__file__)
     dir_app = os.path.abspath(os.path.join(dir_script, '..'))
-    dir_albums = os.path.normpath(os.path.join(dir_app, settings['galdir.dir_albums']))
+    dir_albums = os.path.normpath(os.path.join(
+        dir_app, settings['galdir.dir_albums']))
 
     return dir_albums
+
+# Get requested file path info
+def get_path_info(request):
+    dir_albums = get_albums_path(request.registry.settings)
+
+    if('path' in request.matchdict):
+        path_request = request.matchdict['path']
+        dir_view = os.path.normpath(os.path.join(dir_albums, path_request))
+    else:
+        path_request = ''
+        dir_view = dir_albums
+
+    path_info = {
+        "dir_albums": dir_albums,
+        "dir_view": dir_view,
+        "path_request": path_request,
+    }
+
+    return path_info
