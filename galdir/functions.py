@@ -1,3 +1,4 @@
+import os
 import re
 
 import logging
@@ -44,3 +45,11 @@ def namesplit(path):
 
     return namesplit
 
+
+# Get absolute path of albums dir
+def get_albums_path(settings):
+    dir_script = os.path.dirname(__file__)
+    dir_app = os.path.abspath(os.path.join(dir_script, '..'))
+    dir_albums = os.path.normpath(os.path.join(dir_app, settings['galdir.dir_albums']))
+
+    return dir_albums
