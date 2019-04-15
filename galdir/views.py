@@ -104,5 +104,43 @@ def viewimage(request):
     route_name='dirthumb'
 )
 def dirthumb(request):
+    path_info = functions.get_path_info(request)
 
-    return Response('test')
+    # Process directory name
+    namesplit = functions.namesplit(path_info['path_request'])
+    path_info['dir_view'] = os.path.normpath(os.path.join(path_info['dir_albums'], namesplit['file_dir'], namesplit['file_name']))
+    path_info['path_request'] = namesplit['file_dir'] + '/' + namesplit['file_name']
+    log.debug(path_info)
+
+    if os.path.isdir(path_info['dir_view']):
+        contents = os.listdir(path_info['dir_view'])
+
+        # Process resulting directory list
+        items = []
+        for content in contents:
+            # Add path delimiter if not the root directory
+            if path_info['path_request'] != '':
+                path_content = path_info['path_request'] + '/' + content
+            else:
+                path_content = content
+
+            if re.search(r'^\.', content) == None:
+                if os.path.isdir(os.path.join(path_info['dir_view'], content)):
+                    path_type = 'dir'
+                    #items.append({
+                    #    'name': content,
+                    #    'path': path_content,
+                    #    'type': path_type,
+                    #})
+                elif os.path.isfile(os.path.join(path_info['dir_view'], content)):
+                    path_type = 'file'
+                    items.append({
+                        'name': content,
+                        'path': path_content,
+                        'type': path_type,
+                        'namesplit': functions.namesplit(path_content),
+                    })
+        
+        log.debug(items)
+
+    return Response('testing')
