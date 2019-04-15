@@ -2,6 +2,8 @@ import os
 import io
 import re
 
+from galdir import functions
+
 from pyramid.response import Response
 from pyramid.view import view_config
 
@@ -32,14 +34,19 @@ def home(request):
             if re.search(r'^\.', content) == None:
                 if os.path.isdir(os.path.join(dir_albums, content)):
                     type = 'dir'
+                    items.append({
+                        'name': content,
+                        'path': content,
+                        'type': type,
+                    })
                 else:
                     type = 'file'
-
-                items.append({
-                    'name': content,
-                    'path': content,
-                    'type': type,
-                })
+                    items.append({
+                        'name': content,
+                        'path': content,
+                        'type': type,
+                        'namesplit': functions.namesplit(content),
+                    })
 
     return {'items': items}
 
@@ -68,14 +75,19 @@ def view(request):
             if re.search(r'^\.', content) == None:
                 if os.path.isdir(os.path.join(dir_view, content)):
                     type = 'dir'
+                    items.append({
+                        'name': content,
+                        'path': request.matchdict['path'] + '/' + content,
+                        'type': type,
+                    })
                 else:
                     type = 'file'
-
-                items.append({
-                    'name': content,
-                    'path': request.matchdict['path'] + '/' + content,
-                    'type': type,
-                })
+                    items.append({
+                        'name': content,
+                        'path': request.matchdict['path'] + '/' + content,
+                        'type': type,
+                        'namesplit': functions.namesplit(request.matchdict['path'] + '/' + content),
+                    })
 
     return {'items': items}
 
@@ -85,21 +97,28 @@ def view(request):
 )
 def viewimage(request):
     settings = request.registry.settings
+    path_request = request.matchdict['path']
 
     dir_script = os.path.dirname(__file__)
     dir_app = os.path.abspath(os.path.join(dir_script, '..'))
     dir_albums = os.path.normpath(os.path.join(
         dir_app, settings['galdir.dir_albums']))
-    dir_image = os.path.normpath(os.path.join(
-        dir_app, dir_albums, request.matchdict['path']))
 
+    image_namesplit = functions.namesplit(path_request) 
+    log.debug(image_namesplit)
+
+    dir_image = os.path.normpath(
+        os.path.join(dir_app, dir_albums, image_namesplit['file_dir'], image_namesplit['file_name'] + '.' + image_namesplit['file_ext']))
     log.debug('Viewing from ' + dir_image)
 
     if os.path.isfile(dir_image):
-        # PIL
         try:
             image = Image.open(dir_image)
-            image.thumbnail((200, 200))
+
+            # Handle resize
+            if image_namesplit['file_options']:
+                file_newsize = image_namesplit['file_newsize'][0], image_namesplit['file_newsize'][1]
+                image.thumbnail(file_newsize)
 
             with io.BytesIO() as thumb_bin:
                 # Handle RGBA images
@@ -119,3 +138,6 @@ def viewimage(request):
 
         except IOError:
             log.debug('Something broke.')
+
+    else:
+        return Response('File ' + dir_image + ' not found.')

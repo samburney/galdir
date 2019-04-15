@@ -2,19 +2,17 @@
 
 {% block content %}
     {% for item in items %}
-<p>
         {% if item.type == 'dir' %}
+<p>
     {{item.type}} <a href="/view/{{item.path}}">{{item.name}}</a>
-        {% endif %}
-        {% if item.type == 'file' %}
-        {% endif %}
 </p>
+        {% endif %}
     {% endfor %}
 <p>
     {% for item in items %}
         {% if item.type == 'file' %}
     <a href="/albums/{{item.path}}">
-        <img src="/viewimage/{{item.path}}" />
+        <img src="/viewimage/{%if item.namesplit.file_dir %}{{item.namesplit.file_dir}}/{%endif%}{{item.namesplit.file_name}}-200.{{item.namesplit.file_ext}}" />
     </a>
         {% endif %}
     {% endfor %}
