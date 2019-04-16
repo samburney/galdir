@@ -32,6 +32,13 @@
     {% endfor %}
 </div>
 {% endif %}
+{% if pagination.files_before|length %}
+<div class="hidden">
+{% for file in pagination.files_before %}
+  <a href="/albums/{{file.path}}" data-fancybox="file-gallery">#</a>
+{% endfor %}
+</div>
+{% endif %}
 {% if files|length %}
 <div class="h4">Images</div>
 {% include "includes/pagination.jinja2" %}
@@ -39,8 +46,8 @@
     {% for file in files %}
     <div class="col-sm-6 col-md-4 col-lg-3">
       <div class="img-thumbnail">
-        <a href="/albums/{{file.path}}">
-            <img src="/viewimage/{%if file.namesplit.file_dir %}{{file.namesplit.file_dir}}/{%endif%}{{file.namesplit.file_name}}-250.{{file.namesplit.file_ext}}" />
+        <a href="/albums/{{file.path}}" data-fancybox="file-gallery">
+          <img src="/viewimage/{%if file.namesplit.file_dir %}{{file.namesplit.file_dir}}/{%endif%}{{file.namesplit.file_name}}-250.{{file.namesplit.file_ext}}" />
         </a>
         <div class="caption image-thumb">
          {{file.namesplit.file_name}}
@@ -49,6 +56,13 @@
     </div>
     {% endfor %}
 </div>
+{% if pagination.files_after|length %}
+<div class="hidden">
+{% for file in pagination.files_after %}
+  <a href="/albums/{{file.path}}" data-fancybox="file-gallery">#</a>
+{% endfor %}
+</div>
+{% endif %}
 {% include "includes/pagination.jinja2" %}
 {% endif %}
 {% endblock content %}

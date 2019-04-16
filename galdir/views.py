@@ -80,8 +80,10 @@ def view(request):
     pagination['start'] = (pagination['number'] - 1) * pagination['perpage']
     pagination['end'] = pagination['start'] + pagination['perpage']
     pagination['total'] = math.ceil(len(files) / pagination['perpage'])
+    pagination['files_before'] = files[0:pagination['start']]
+    pagination['files_after'] = files[pagination['end']:]
 
-    # Return the pagination
+    # Return the page response
     response_data = {
         'directories': directories,
         'files': files[pagination['start']:pagination['end']],
