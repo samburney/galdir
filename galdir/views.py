@@ -1,6 +1,7 @@
 import os
 import io
 import re
+import math
 
 from galdir import functions
 
@@ -65,9 +66,24 @@ def view(request):
                     except IOError:
                         pass
 
+    # Handle pagination
+    pagination = {
+        'perpage': 12
+    }
+    try:
+        pagination['number'] = int(request.params.getone('page'))
+    except KeyError:
+        pagination['number'] = 1
+    
+    pagination['start'] = (pagination['number'] - 1) * pagination['perpage']
+    pagination['end'] = pagination['start'] + pagination['perpage']
+    pagination['total'] = math.ceil(len(files) / pagination['perpage'])
+
+    # Return the pagination
     response_data = {
         'directories': directories,
-        'files': files[0:12],
+        'files': files[pagination['start']:pagination['end']],
+        'pagination': pagination,
     }
     return response_data
 
