@@ -42,12 +42,14 @@ def view(request):
 
             if not content.startswith('.'):
                 if os.path.isdir(os.path.join(path_info['dir_view'], content)):
-                    path_type = 'dir'
-                    directories.append({
-                        'name': content,
-                        'path': path_content,
-                        'type': path_type,
-                    })
+                    # Make sure this directory isn't empty
+                    if len(os.listdir(os.path.join(path_info['dir_view'], content))) > 0:
+                        path_type = 'dir'
+                        directories.append({
+                            'name': content,
+                            'path': path_content,
+                            'type': path_type,
+                        })
                 else:
                     path_type = 'file'
 
