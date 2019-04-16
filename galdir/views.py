@@ -68,7 +68,7 @@ def view(request):
 
     # Handle pagination
     pagination = {
-        'perpage': 12
+        'perpage': int(request.registry.settings['galdir.images_perpage'])
     }
     try:
         pagination['number'] = int(request.params.getone('page'))

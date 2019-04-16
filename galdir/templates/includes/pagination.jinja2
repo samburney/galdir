@@ -1,0 +1,26 @@
+{% if pagination.total > 1 %}
+<div class="row">
+  <nav aria-label="Page navigation">
+    <div class="text-center">
+      <ul class="pagination pagination-sm"></ul>
+    </div>
+  </nav>
+</div>
+{% endif %}
+
+<script type="text/javascript">
+$(function() {
+    $('.pagination').pagination({
+      pages: {{pagination.total}},
+      displayedPages: 5,
+      edges: 3,
+      currentPage: {{pagination.number}},
+      onPageClick(pageNumber, event){
+        window.location.href = '{{request.path_url}}?page=' + pageNumber;
+      },
+      cssStyle: '',
+      prevText: '<span aria-hidden="true">&laquo;</span>',
+      nextText: '<span aria-hidden="true">&raquo;</span>',      
+    });
+});
+</script>
