@@ -1,6 +1,8 @@
 import os
 import re
 
+from PIL import Image
+
 import logging
 log = logging.getLogger(__name__)
 
@@ -73,3 +75,32 @@ def get_path_info(request):
     }
 
     return path_info
+
+
+# Resize image inside a box
+def resize_crop(image, newsize):
+    if(image.width > image.height):
+        box = (
+            int(image.width/2 - image.height/2),
+            0,
+            int(image.width/2 + image.height/2),
+            image.height,
+        )
+    else:
+        box = (
+            0,
+            int(image.height/2 - image.width/2),
+            image.width,
+            int(image.height/2 + image.width/2),
+        )
+
+    newimage = image \
+        .crop(box) \
+        .resize(newsize, resample=Image.BICUBIC)
+
+    return newimage
+
+
+# Split filter for jinja2
+def split(value, index, char=','):
+    return value.split(char)[index]

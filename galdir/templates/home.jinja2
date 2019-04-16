@@ -1,22 +1,52 @@
 {% extends "layouts/default.jinja2" %} 
 
 {% block content %}
-<p>
-    {% for item in items %}
-        {% if item.type == 'dir' %}
-    <a href="/view/{{item.path}}">
-        <img src="/dirthumb/{{item.path}}-200.jpg" />
-    </a>
-        {% endif %}
+{% set path_parts = ['Home'] %}
+{% if request.matchdict['path'] is defined and request.matchdict['path'] != '' %}
+{% set path_parts = path_parts + request.matchdict['path'].split('/') %}
+{% endif %}
+<ol class="breadcrumb">
+{% for part in path_parts %}
+{% if loop.index == path_parts|length %}
+  <li class="active">{{part}}</li>
+{% else %}
+  <li><a href="{{request.route_url('view', path=(path_parts[1:loop.index])|join('/'))}}">{{part}}</a></li>
+{% endif %}
+{% endfor %}
+</ol>
+<div class="h3">{{ path_parts[-1] }}</div>
+{% if directories|length %}
+<div class="h4">Albums</div>
+<div class="row">
+    {% for directory in directories %}
+    <div class="col-md-2">
+      <div class="img-thumbnail">
+        <a href="/view/{{directory.path}}">
+            <img src="/dirthumb/{{directory.path}}-150.png" />
+        </a>
+        <div class="caption">
+          <h5 class="text-center">{{directory.path|split(-1, '/')}}</h5>
+        </div>
+      </div>
+    </div>
     {% endfor %}
-</p>
-<p>
-    {% for item in items %}
-        {% if item.type == 'file' %}
-    <a href="/albums/{{item.path}}">
-        <img src="/viewimage/{%if item.namesplit.file_dir %}{{item.namesplit.file_dir}}/{%endif%}{{item.namesplit.file_name}}-200.{{item.namesplit.file_ext}}" />
-    </a>
-        {% endif %}
+</div>
+{% endif %}
+{% if files|length %}
+<div class="h4">Images</div>
+<div class="row">
+    {% for file in files %}
+    <div class="col-md-3">
+      <div class="img-thumbnail">
+        <a href="/albums/{{file.path}}">
+            <img src="/viewimage/{%if file.namesplit.file_dir %}{{file.namesplit.file_dir}}/{%endif%}{{file.namesplit.file_name}}-250.{{file.namesplit.file_ext}}" />
+        </a>
+        <div class="caption">
+          <h5 class="text-center">{{file.namesplit.file_name|truncate(30)}}</h5>
+        </div>
+      </div>
+    </div>
     {% endfor %}
-</p>
+</div>
+{% endif %}
 {% endblock content %}

@@ -13,6 +13,7 @@ def main(global_config, **settings):
 
     dir_albums = functions.get_albums_path(settings)
     config.add_static_view('albums', dir_albums)
+    config.add_static_view('static', 'assets')
 
     config.scan('.views')
     return config.make_wsgi_app()
