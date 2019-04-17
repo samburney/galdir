@@ -11,9 +11,7 @@ $(function() {
       displayedPages: 5,
       edges: 3,
       currentPage: {{pagination.number}},
-      onPageClick(pageNumber, event){
-        window.location.href = '{{request.path_url}}?page=' + pageNumber;
-      },
+      hrefTextPrefix: '?page=',
       selectOnClick: false,
       cssStyle: 'pagination pagination-sm',
       prevText: '<span aria-hidden="true">&laquo;</span>',
