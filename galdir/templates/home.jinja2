@@ -19,12 +19,12 @@
 <div class="h4">Albums</div>
 <div class="row">
     {% for directory in directories %}
-    <div class="col-sm-6 col-md-3 col-lg-2">
+    <div class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
       <div class="img-thumbnail">
         <a href="/view/{{directory.path}}">
-          <img src="/dirthumb/{{directory.path}}-150.png" />
+          <img class="img-responsive" src="/dirthumb/{{directory.path}}-500.png" />
         </a>
-        <div class="caption album-thumb">
+        <div class="caption">
          {{directory.path|split(-1, '/')}}
         </div>
       </div>
@@ -43,12 +43,12 @@
 <div class="h4">Images</div>
 <div class="row">
     {% for file in files %}
-    <div class="col-sm-6 col-md-4 col-lg-3">
+    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-2">
       <div class="img-thumbnail">
         <a href="/albums/{{file.path}}" data-fancybox="file-gallery">
-          <img src="/viewimage/{%if file.namesplit.file_dir %}{{file.namesplit.file_dir}}/{%endif%}{{file.namesplit.file_name}}-250.{{file.namesplit.file_ext}}" />
+          <img class="img-responsive" src="/viewimage/{%if file.namesplit.file_dir %}{{file.namesplit.file_dir}}/{%endif%}{{file.namesplit.file_name}}-768.{{file.namesplit.file_ext}}" />
         </a>
-        <div class="caption image-thumb">
+        <div class="caption">
          {{file.namesplit.file_name}}
         </div>
       </div>

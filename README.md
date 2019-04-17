@@ -43,7 +43,7 @@ services:
     restart: 'unless-stopped'
     environment:
       GALDIR_SITENAME: 'Gallery Site Name'
-      GALDIR_IMAGES_PERPAGE: '8'
+      GALDIR_IMAGES_PERPAGE: '12'
     volumes:
       - '/etc/localtime:/etc/localtime:ro'
       - './data/cache:/usr/local/share/galdir/galdir/cache'
@@ -57,7 +57,7 @@ services:
 - GALDIR_SITENAME: Name of this site - is used in titles and the Navbar.  Defaults to GalDir.
 - GALDIR_ALBUMS: Defaults to 'albums', which maps to ```/usr/local/share/galdir/albums/```
 - GALDIR_CACHE: Defaults to 'cache', which maps to ```/usr/local/share/galdir/galdir/cache/``` within the Docker container.
-- GALDIR_IMAGES_PERPAGE: Number of images displayed per page.  Defaults to 8.
+- GALDIR_IMAGES_PERPAGE: Number of images displayed per page.  Defaults to 12.
 
 ## License
 This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/.

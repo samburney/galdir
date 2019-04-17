@@ -6,21 +6,13 @@ body {
   margin-bottom: 20px;
 }
 
-.img-thumbnail .caption {
+.caption {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   text-align: center;
   font-size: 12px;
   font-weight: bold;
-}
-
-.album-thumb {
-  width: 150px;
-}
-
-.image-thumb {
-  width: 250px;
 }
 
 .license {
