@@ -116,7 +116,7 @@ def viewimage(request):
     dir_cache = os.path.join(os.path.dirname(
                 __file__), request.registry.settings['galdir.dir_cache'])
     image_cachepath = os.path.join(
-        dir_cache, image_cachename + '.' + image_namesplit['file_ext'])
+        dir_cache, image_cachename + '.' + image_namesplit['file_ext'].lower())
 
     # Determine image output format
     image_format = 'JPEG'
@@ -204,7 +204,7 @@ def dirthumb(request):
     dir_cache = os.path.join(os.path.dirname(
         __file__), request.registry.settings['galdir.dir_cache'])
     image_cachepath = os.path.join(
-        dir_cache, image_cachename + '.' + namesplit['file_ext'])
+        dir_cache, image_cachename + '.' + namesplit['file_ext'].lower())
 
     if os.path.isdir(path_info['dir_view']):
         if not os.path.isfile(image_cachepath):

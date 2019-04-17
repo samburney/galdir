@@ -1,0 +1,13 @@
+#!/usr/bin/with-contenv bash
+
+# If config file exists, start daemon
+if [ -f /usr/local/share/galdir/production.ini ] ; then
+    echo "Starting GalDir Web Server"
+
+    exec \
+        pserve /usr/local/share/galdir/production.ini
+else
+    echo /usr/local/share/galdir/production.ini config file is missing
+fi
+
+exit 1
