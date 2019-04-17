@@ -26,18 +26,28 @@
     <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
   </head>
   <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div id="wrap">
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/">{{request.registry.settings['galdir.sitename']}}</a>
+          </div>
+        </div>
+      </nav>
       <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/">{{request.registry.settings['galdir.sitename']}}</a>
+        <div class="content" id="content">
+          {% block content %}
+              <p>No content</p>
+          {% endblock content %}
         </div>
       </div>
-    </nav>
-    <div class="container">
-      <div class="content" id="content">
-        {% block content %}
-            <p>No content</p>
-        {% endblock content %}
+      <div id="push"></div>
+    </div>
+    <div id="footer" class="container">
+      <div class="row license text-center">
+        <a href="https://github.com/samburney/galdir/issues">Report a Bug or Request a Feature</a><br />
+        <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png" /></a>
+        <a href="https://github.com/samburney/galdir">GalDir</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
       </div>
     </div>
   </body>
