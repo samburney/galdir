@@ -129,8 +129,10 @@ def viewimage(request):
         image_mime = 'image/gif'
 
     if not os.path.isfile(image_cachepath):
+        image_fullname = image_namesplit['file_name'] + \
+            ('.' + image_namesplit['file_ext'], '')[image_namesplit['file_ext'] == '']
         dir_image = os.path.normpath(
-            os.path.join(path_info['dir_albums'], image_namesplit['file_dir'], image_namesplit['file_name'] + '.' + image_namesplit['file_ext']))
+            os.path.join(path_info['dir_albums'], image_namesplit['file_dir'], image_fullname))
         if os.path.isfile(dir_image):
             try:
                 image = Image.open(dir_image)

@@ -22,8 +22,12 @@ def namesplit(path):
 
     # Break into filename and extension
     filename_parts = re.search(r'^(.*)\.(.*)', namesplit['file_origname'])
-    namesplit['file_name'] = filename_parts[1]
-    namesplit['file_ext'] = filename_parts[2]
+    if filename_parts != None:
+        namesplit['file_name'] = filename_parts[1]
+        namesplit['file_ext'] = filename_parts[2]
+    else:
+        namesplit['file_name'] = namesplit['file_origname']
+        namesplit['file_ext'] = ''
 
     # Get file options, if they are set
     namesplit['file_options'] = False
