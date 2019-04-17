@@ -27,23 +27,25 @@ def namesplit(path):
 
     # Get file options, if they are set
     namesplit['file_options'] = False
-    filename_parts = re.search(r'^(.*)-([x0-9]+)$', namesplit['file_name'])
+    fileoption_parts = re.search(r'^(.*)-([x0-9]+)$', namesplit['file_name'])
 
-    if filename_parts != None:
+    if fileoption_parts != None:
         namesplit['file_options'] = True
-        namesplit['file_name'] = filename_parts[1]
+        namesplit['file_name'] = fileoption_parts[1]
 
         # Determine resize option(s)
-        if re.search(r'x', filename_parts[2]):
+        if re.search(r'x', fileoption_parts[2]):
             namesplit['file_newsize'] = [
-                int(filename_parts[2].split('x')[0]),
-                int(filename_parts[2].split('x')[1]),
+                int(fileoption_parts[2].split('x')[0]),
+                int(fileoption_parts[2].split('x')[1]),
             ]
-        elif re.search(r'^[0-9]+$', filename_parts[2]):
+        elif re.search(r'^[0-9]+$', fileoption_parts[2]):
             namesplit['file_newsize'] = [
-                int(filename_parts[2]),
-                int(filename_parts[2]),
+                int(fileoption_parts[2]),
+                int(fileoption_parts[2]),
             ]
+
+    namesplit['file_cleanname'] = cleanname(namesplit['file_name'])
 
     return namesplit
 
@@ -104,3 +106,13 @@ def resize_crop(image, newsize):
 # Split filter for jinja2
 def split(value, index, char=','):
     return value.split(char)[index]
+
+
+# Make a reproducible cleaned up filename
+def cleanname(name):
+    name = name.lower()                         # Lowercase
+    name = re.sub(r'[^a-z0-9_]', '_', name)     # Replace all invalid characters with '_'
+    name = re.sub(r'_[_]*', '_', name)          # Replace duplicate '_'
+    name = name.strip('_')                      # Strip leading/trailing '_'
+
+    return name
