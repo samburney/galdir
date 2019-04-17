@@ -6,7 +6,7 @@ ENV GALDIR_LISTEN=0.0.0.0:6543 \
     GALDIR_SITENAME=GalDir \
     GALDIR_ALBUMS=albums \
     GALDIR_CACHE=cache \
-    GALDIR_ITEMS_PERPAGE=8
+    GALDIR_IMAGES_PERPAGE=8
 
 RUN apk add --update \
     git \
