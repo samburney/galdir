@@ -6,7 +6,6 @@ requires = [
     'pyramid',
     'waitress',
     'pyramid_jinja2',
-#    'Wand',
     'Pillow',
 ]
 
