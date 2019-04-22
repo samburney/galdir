@@ -49,7 +49,7 @@ services:
       - './data/cache:/usr/local/share/galdir/galdir/cache'
       - './data/albums:/usr/local/share/galdir/albums'
     ports:
-      '6543:6543/tcp'
+      - '6543:6543/tcp'
 ```
 
 #### Available Environment Variables
