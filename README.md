@@ -22,7 +22,7 @@ Installation Steps:
    ```
 1. Run the server
    ```
-   pserve config.ini
+   waitress --call 'galdir:create_app'
    ```
 By default this should now give you a Web Gallery at http://\<server\>:6543/ based on the contents of the albums directory configured in config.ini.
 
