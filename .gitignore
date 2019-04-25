@@ -1,3 +1,6 @@
 *.egg-info
 development.ini
 .DS_Store
+
+venv/
+__pycache__/

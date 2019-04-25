@@ -2,15 +2,15 @@
 
 {% block content %}
 {% set path_parts = ['Home'] %}
-{% if request.matchdict['path'] is defined and request.matchdict['path'] != '' %}
-{% set path_parts = path_parts + request.matchdict['path'].split('/') %}
+{% if request.view_args.path is defined and request.view_args.path != '' %}
+{% set path_parts = path_parts + request.view_args.path.split('/') %}
 {% endif %}
 <ol class="breadcrumb">
 {% for part in path_parts %}
 {% if loop.index == path_parts|length %}
   <li class="active">{{part}}</li>
 {% else %}
-  <li><a href="{{request.route_url('view', path=(path_parts[1:loop.index])|join('/'))}}">{{part}}</a></li>
+  <li><a href="{{url_for('views.view', path=(path_parts[1:loop.index])|join('/'))}}">{{part}}</a></li>
 {% endif %}
 {% endfor %}
 </ol>

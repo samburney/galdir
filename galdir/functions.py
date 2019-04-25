@@ -1,10 +1,9 @@
 import os
 import re
+import logging
 
 from PIL import Image
-
-import logging
-log = logging.getLogger(__name__)
+from flask import current_app as app
 
 # Split a file path into name/extension/options
 def namesplit(path):
@@ -55,24 +54,26 @@ def namesplit(path):
 
 
 # Get absolute path of albums dir
-def get_albums_path(settings):
+def get_albums_path():
     dir_script = os.path.dirname(__file__)
     dir_app = os.path.abspath(os.path.join(dir_script, '..'))
     dir_albums = os.path.normpath(os.path.join(
-        dir_app, settings['galdir.dir_albums']))
+        dir_app, app.config['GALDIR_DIR_ALBUMS']))
 
     return dir_albums
 
 # Get requested file path info
 def get_path_info(request):
-    dir_albums = get_albums_path(request.registry.settings)
+    dir_albums = get_albums_path()
 
-    if('path' in request.matchdict):
-        path_request = request.matchdict['path']
-        dir_view = os.path.normpath(os.path.join(dir_albums, path_request))
-    else:
-        path_request = ''
-        dir_view = dir_albums
+    path_request = ''
+    dir_view = dir_albums
+    try:
+        if request.view_args['path']:
+            path_request = request.view_args['path']
+            dir_view = os.path.normpath(os.path.join(dir_albums, path_request))
+    except KeyError:
+        pass
 
     path_info = {
         "dir_albums": dir_albums,
@@ -120,3 +121,8 @@ def cleanname(name):
     name = name.strip('_')                      # Strip leading/trailing '_'
 
     return name
+
+
+# Quick log function
+def log(var):
+    app.logger.info(var)
