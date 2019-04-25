@@ -1,10 +1,12 @@
 #!/usr/bin/with-contenv bash
 
-# Handle GALDIR_LISTEN GALDIR_SITENAME GALDIR_ALBUMS GALDIR_CACHE GALDIR_IMAGES_PERPAGE env variables
-cat /usr/local/share/galdir/config.ini \
-    | sed -E "s/(listen = ).*/\1${GALDIR_LISTEN}/" \
-    | sed -E "s/(galdir.sitename = ).*/\1${GALDIR_SITENAME}/" \
-    | sed -E "s/(galdir.dir_albums = ).*/\1${GALDIR_ALBUMS}/" \
-    | sed -E "s/(galdir.dir_cache = ).*/\1${GALDIR_CACHE}/" \
-    | sed -E "s/(galdir.images_perpage = ).*/\1${GALDIR_IMAGES_PERPAGE}/" \
-    > /usr/local/share/galdir/production.ini
+config_file=/usr/local/share/galdir/galdir/config.py
+
+# Initial config.py setup
+echo "DEBUG=False" > $config_file
+echo "SECRET_KEY=$(python3 -c 'import os; print(os.urandom(16))')" >> $config_file
+
+# Handle all GALDIR_* environment variables
+for var in ${!GALDIR_*} ; do
+    echo $var=\""${!var}"\" >> $config_file
+done

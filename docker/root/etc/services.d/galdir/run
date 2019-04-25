@@ -1,13 +1,6 @@
 #!/usr/bin/with-contenv bash
 
-# If config file exists, start daemon
-if [ -f /usr/local/share/galdir/production.ini ] ; then
-    echo "Starting GalDir Web Server"
+echo "Starting GalDir Web Server"
 
-    exec \
-        pserve /usr/local/share/galdir/production.ini
-else
-    echo /usr/local/share/galdir/production.ini config file is missing
-fi
-
-exit 1
+exec \
+    waitress-serve --listen=0.0.0.0:6543 --call 'galdir:create_app'
