@@ -3,4 +3,4 @@
 echo "Starting GalDir Web Server"
 
 exec \
-    waitress-serve --listen=0.0.0.0:6543 --call 'galdir:create_app'
+    waitress-serve --listen=${GALDIR_LISTEN} --call 'galdir:create_app'

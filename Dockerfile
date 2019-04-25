@@ -2,7 +2,8 @@ FROM lsiobase/alpine:3.9
 
 LABEL maintainer 'Sam Burney <sam@burney.io>'
 
-ENV GALDIR_SITENAME="GalDir Docker" \
+ENV GALDIR_LISTEN=0.0.0.0:6543 \
+    GALDIR_SITENAME="GalDir Docker" \
     GALDIR_ALBUMS=albums \
     GALDIR_CACHE=cache \
     GALDIR_IMAGES_PERPAGE=12
