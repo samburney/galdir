@@ -1,0 +1,9 @@
+## Flask Framework Config
+DEBUG=False
+SECRET_KEY='changeme'
+
+## GalDir App Config
+GALDIR_SITENAME='GalDir'
+GALDIR_DIR_ALBUMS='albums'
+GALDIR_DIR_CACHE='cache'
+GALDIR_IMAGES_PERPAGE=12

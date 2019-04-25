@@ -108,11 +108,6 @@ def resize_crop(image, newsize):
     return newimage
 
 
-# Split filter for jinja2
-def split(value, index, char=','):
-    return value.split(char)[index]
-
-
 # Make a reproducible cleaned up filename
 def cleanname(name):
     name = name.lower()                         # Lowercase
