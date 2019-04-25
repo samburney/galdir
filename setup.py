@@ -4,6 +4,7 @@ from setuptools import setup, find_packages
 # by virtue of the Setuptools `install_requires` value below.
 requires = [
     'flask',
+    'waitress',
     'Pillow',
 ]
 
